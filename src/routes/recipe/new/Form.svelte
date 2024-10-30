@@ -82,7 +82,7 @@
 	<Form.Field {form} name="name">
 		<Form.Control let:attrs>
 			<Form.Label class="text-xl">Name</Form.Label>
-			<Input {...attrs} bind:value={$formData.name} />
+			<Input {...attrs} bind:value={$formData.name} autocomplete="off"/>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
@@ -124,7 +124,7 @@
 		<Form.Control let:attrs>
 			<Form.Label class="text-xl">Tags</Form.Label>
 			<div class="flex gap-2">
-				<Input {...attrs} bind:value={newTag} />
+				<Input {...attrs} bind:value={newTag} autocomplete="off" />
 				<Button size="icon" on:click={addTag}>
 					<Plus />
 				</Button>
@@ -132,7 +132,7 @@
 			<div class="grid grid-cols-1 space-y-2">
 				{#each $formData.tags as tag, index}
 					<div class="flex gap-2">
-						<Input {...attrs} bind:value={$formData.tags[index]} />
+						<Input {...attrs} bind:value={$formData.tags[index]} autocomplete="off" />
 						<Button size="icon" variant="destructive" on:click={() => removeTag(index)}>
 							<Trash />
 						</Button>
@@ -171,7 +171,7 @@
 		<Form.Control let:attrs>
 			<Form.Label class="text-xl">Instructions</Form.Label>
 			<div class="flex gap-2">
-				<Input {...attrs} bind:value={newInstruction} />
+				<Input {...attrs} bind:value={newInstruction} autocomplete="off"/>
 				<Button size="icon" on:click={addInstruction}>
 					<Plus />
 				</Button>
@@ -243,4 +243,4 @@
 	<Form.Button class="w-full">Submit</Form.Button>
 </form>
 
-<SuperDebug data={$formData} />
+<!-- <SuperDebug data={$formData} /> -->
