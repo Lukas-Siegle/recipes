@@ -5,15 +5,15 @@ import pkg from 'pg';
 const { Pool } = pkg;
 
 const pool = new Pool({
-    host: DATABASE_HOST,
-    user: DATABASE_USER,
-    password: DATABASE_PASSWORD,
-    database: DATABASE_NAME,
-    max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
-  })
-  
+  host: DATABASE_HOST,
+  user: DATABASE_USER,
+  password: DATABASE_PASSWORD,
+  database: DATABASE_NAME,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+})
+
 export const db = await pool.connect()
 
 export async function GetRecipe(id: number): Promise<Recipe | null> {
@@ -21,9 +21,9 @@ export async function GetRecipe(id: number): Promise<Recipe | null> {
     const query = "SELECT * FROM recipes WHERE id = $1;";
     const values = [id];
     const result = await db.query(query, values);
-    
+
     if (result.rows.length > 0) {
-      const row = result.rows[0]; 
+      const row = result.rows[0];
       return {
         id: row.id,
         name: row.name,
@@ -41,17 +41,21 @@ export async function GetRecipe(id: number): Promise<Recipe | null> {
 
       };
     }
-    
-    return null; 
+
+    return null;
   } catch (e) {
-    return null; 
+    return null;
   }
 }
 
 
-export async function GetRecipes(): Promise<Recipe[]> {
+export async function GetRecipes(condition?: string): Promise<Recipe[]> {
   try {
-    const query = "SELECT id, name, description, fats, ingredients, tags, instructions, proteins, calories, carbohydrates, estimate, image FROM recipes;";
+    let query = "SELECT id, name, description, fats, ingredients, tags, instructions, proteins, calories, carbohydrates, estimate, image FROM recipes";
+    if (condition) {
+      query += ` where ${condition};`
+    }
+
     const result = await db.query(query);
     return result.rows.map(row => ({
       id: row.id,
@@ -71,5 +75,37 @@ export async function GetRecipes(): Promise<Recipe[]> {
   } catch (e) {
     console.error(e);
     return [];
+  }
+}
+
+export async function DeleteRecipe(id: string): Promise<boolean> {
+  try {
+    const query = "DELETE FROM recipes where id = $1;";
+    const values = [id];
+    const result = await db.query(query, values);
+    return true
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+}
+
+export async function GetTags(): Promise<String[]> {
+  try {
+    const query = "SELECT DISTINCT unnest(tags) AS unique_tag FROM recipes WHERE tags IS NOT NULL;"
+    const result = await db.query(query)
+    return result.rows
+  } catch (e) {
+    return []
+  }
+}
+
+export async function GetNames(): Promise<String[]>{
+  try {
+    const query = "SELECT name FROM recipes;"
+    const result = await db.query(query)
+    return result.rows
+  } catch (e) {
+    return []
   }
 }
