@@ -7,12 +7,15 @@
 	import { toggleMode } from 'mode-watcher';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { Toaster } from '$lib/components/ui/sonner';
+	import type { LayoutData } from './$types';
 	let { children } = $props();
+	export const data: LayoutData | undefined = $state();
+
 </script>
 
 <ModeWatcher />
 <div class="flex flex-row">
-	<Sidebar />
+	<Sidebar tags={data?.tags} names={data?.names}/>
 	<ScrollArea class="w-full max-h-screen overflow-y-auto pt-10"> 
 		{@render children()}
 	</ScrollArea>

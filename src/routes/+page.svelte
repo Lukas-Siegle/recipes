@@ -14,7 +14,7 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each recipes as recipe}
 			<a href={`/recipe/view?id=${recipe.id}`}>
-				<Card.Root class="overflow-hidden">
+				<Card.Root class="overflow-hidden h-full">
 					<Card.Header>
 						<Card.Title class="text-xl">{recipe.name}</Card.Title>
 					</Card.Header>
